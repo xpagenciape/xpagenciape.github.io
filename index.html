@@ -1,6 +1,6 @@
 <!doctype html>
 <html
-  lang="en"
+  lang="es-419"
   data-ws-project="1829392b-a03a-44d8-8480-95480b8c85c4"
   data-ws-last-published="2025-05-07T04:52:14.450Z"
 >
@@ -29,6 +29,10 @@
 	<meta name="twitter:description" content="Competencias, campañas y activaciones para el público gamer." />
 	<meta name="twitter:image" content="https://xpagencia.pe/assets/social-preview.jpg" />
 	
+	<!-- Canonical Link -->
+	<link rel="canonical" href="https://xpagencia.pe/" />
+	<link rel="manifest" href="/manifest.json" />
+	
 	<!--Structured Data-->
 	<script type="application/ld+json">
 	{
@@ -41,10 +45,6 @@
 	  "sameAs": []
 	}
 	</script>
-	
-	<!-- Canonical Link -->
-	<link rel="canonical" href="https://xpagencia.pe/" />
-	<link rel="manifest" href="/manifest.json" />
 
 	<!-- Other stuff -->
     <link
@@ -920,16 +920,89 @@
       type="text/javascript"
     />
 	<script>
-	  const observer = new MutationObserver(() => {
+	  // === HEAD OBSERVER ===
+	  const ensureHeadMeta = () => {
+		const head = document.head;
+
+		const ensureTag = (tagName, attrs) => {
+		  const selector = Object.entries(attrs)
+			.map(([k, v]) => `[${k}="${v}"]`)
+			.join("");
+		  let el = head.querySelector(`${tagName}${selector}`);
+		  if (!el) {
+			el = document.createElement(tagName);
+			for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+			head.appendChild(el);
+		  }
+		};
+
+		if (document.title !== "XP Agencia | Especialistas en Esports & Gaming") {
+		  document.title = "XP Agencia | Especialistas en Esports & Gaming";
+		}
+
+		ensureTag("meta", { name: "viewport", content: "width=device-width,initial-scale=1" });
+		ensureTag("meta", { name: "robots", content: "index, follow" });
+		ensureTag("meta", {
+		  name: "description",
+		  content:
+			"Somos XP Agencia, especialistas en esports, gaming y producción de eventos. Creamos experiencias memorables que conectan a marcas con audiencias jóvenes.",
+		});
+
+		ensureTag("meta", { property: "og:url", content: "https://xpagencia.pe/" });
+		ensureTag("meta", {
+		  property: "og:title",
+		  content: "XP Agencia | Especialistas en Esports & Gaming",
+		});
+		ensureTag("meta", {
+		  property: "og:description",
+		  content: "Competencias, campañas y activaciones para el público gamer.",
+		});
+		ensureTag("meta", { property: "og:type", content: "website" });
+		ensureTag("meta", {
+		  property: "og:image",
+		  content: "https://xpagencia.pe/assets/social-preview.jpg",
+		});
+
+		ensureTag("meta", { name: "twitter:card", content: "summary_large_image" });
+		ensureTag("meta", {
+		  name: "twitter:title",
+		  content: "XP Agencia | Especialistas en Esports & Gaming",
+		});
+		ensureTag("meta", {
+		  name: "twitter:description",
+		  content: "Competencias, campañas y activaciones para el público gamer.",
+		});
+		ensureTag("meta", {
+		  name: "twitter:image",
+		  content: "https://xpagencia.pe/assets/social-preview.jpg",
+		});
+
+		ensureTag("link", { rel: "canonical", href: "https://xpagencia.pe/" });
+		ensureTag("link", { rel: "manifest", href: "/manifest.json" });
+	  };
+
+	  // === BODY OBSERVER ===
+	  const ensureFormFix = () => {
 		const form = document.querySelector('form');
-		if (form && form.getAttribute('action') !== 'https://formsubmit.co/9edd0beb34367d44fd9b588a13c91286') {
+		if (
+		  form &&
+		  form.getAttribute('action') !== 'https://formsubmit.co/9edd0beb34367d44fd9b588a13c91286'
+		) {
 		  form.setAttribute('action', 'https://formsubmit.co/9edd0beb34367d44fd9b588a13c91286');
 		  form.setAttribute('method', 'POST');
-		  observer.disconnect(); // stop observing once done
 		}
-	  });
+	  };
 
-	  observer.observe(document.body, { childList: true, subtree: true });
+	  // === INIT OBSERVERS ===
+	  const headObserver = new MutationObserver(ensureHeadMeta);
+	  headObserver.observe(document.head, { childList: true, subtree: true });
+
+	  const bodyObserver = new MutationObserver(ensureFormFix);
+	  bodyObserver.observe(document.body, { childList: true, subtree: true });
+
+	  // Initial run
+	  ensureHeadMeta();
+	  ensureFormFix();
 	</script>
   </body>
 </html>
